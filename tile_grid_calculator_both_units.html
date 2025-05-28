@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tile & Grid Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f4f4f4;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+    }
+    label, input, select {
+      display: block;
+      margin: 10px 0;
+      width: 100%;
+    }
+    button {
+      padding: 10px;
+      width: 100%;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .results {
+      margin-top: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Tile & Grid Calculator</h2>
+  <label for="unit">Select Unit:</label>
+  <select id="unit">
+    <option value="sqm">Square Meters (sqm)</option>
+    <option value="sqft">Square Feet (sqft)</option>
+  </select>
+  <label for="area">Enter Area:</label>
+  <input type="number" id="area" placeholder="e.g. 41" />
+  <button onclick="calculate()">Calculate</button>
+
+  <div class="results" id="results"></div>
+
+  <script>
+    function calculate() {
+      const areaInput = parseFloat(document.getElementById('area').value);
+      const unit = document.getElementById('unit').value;
+      if (isNaN(areaInput) || areaInput <= 0) {
+        document.getElementById('results').innerHTML = '<p>Please enter a valid area.</p>';
+        return;
+      }
+
+      let sqft = unit === 'sqm' ? areaInput * 10.764 : areaInput;
+      let displayArea = unit === 'sqm' ? areaInput + ' sqm' : areaInput + ' sqft';
+
+      const tileAreaSqft = 3.87;
+      const tiles = Math.ceil(sqft / tileAreaSqft);
+
+      const ratio = sqft / 1076;
+      const mainT = Math.ceil(28 * ratio);
+      const fourFt = Math.ceil(136 * ratio);
+      const twoFt = Math.ceil(136 * ratio);
+      const wallAngle = Math.ceil(21 * ratio);
+
+      document.getElementById('results').innerHTML = `
+        <h3>Results for ${displayArea}</h3>
+        <p><strong>Tiles Required:</strong> ${tiles}</p>
+        <p><strong>Main T:</strong> ${mainT} pcs</p>
+        <p><strong>4 ft:</strong> ${fourFt} pcs</p>
+        <p><strong>2 ft:</strong> ${twoFt} pcs</p>
+        <p><strong>Wall Angle:</strong> ${wallAngle} pcs</p>
+      `;
+    }
+  </script>
+</body>
+</html>
